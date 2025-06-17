@@ -1,12 +1,31 @@
 {
   "name": "prompt-optimizer",
   "version": "1.0.7",
+  "description": "AI-powered prompt optimization tool with multi-round iteration and version tracking. Supports major AI models with client-side processing for data security.",
+  "author": "linshenkx",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/linshenkx/prompt-optimizer.git"
+  },
+  "homepage": "https://prompt.always200.com",
+  "keywords": [
+    "prompt",
+    "optimization",
+    "ai",
+    "llm",
+    "openai",
+    "gemini",
+    "deepseek",
+    "client-side",
+    "privacy"
+  ],
+  "license": "MIT",
   "private": true,
   "packageManager": "pnpm@10.6.1",
   "engines": {
     "node": "^18.0.0 || ^20.0.0 || ^22.0.0",
-    "npm": "请使用pnpm代替npm",
-    "yarn": "请使用pnpm代替yarn"
+    "npm": "Please use pnpm instead of npm",
+    "yarn": "Please use pnpm instead of yarn"
   },
   "scripts": {
     "build:core": "pnpm -F @prompt-optimizer/core build",

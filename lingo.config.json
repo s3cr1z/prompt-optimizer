@@ -1,11 +1,19 @@
 {
   "source": "en-US",
-  "targets": ["zh-CN", "ja-JP", "ko-KR", "es-ES", "fr-FR", "de-DE"],
+  "targets": [
+    "zh-CN",
+    "ja-JP",
+    "ko-KR",
+    "es-ES",
+    "fr-FR",
+    "de-DE"
+  ],
   "include": [
-    "packages/ui/src/i18n/locales/**/*.ts",
-    "packages/extension/public/_locales/**/*.json",
-    "README*.md",
-    "docs/**/*.md"
+    "README_EN.md",
+    "packages/ui/src/i18n/locales/en-US.ts",
+    "packages/extension/public/_locales/en/messages.json",
+    "docs/**/*.md",
+    "package.json"
   ],
   "exclude": [
     "node_modules/**",
