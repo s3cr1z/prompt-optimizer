@@ -1,0 +1,57 @@
+name: Lingo.Dev AI Localization
+
+on:
+  push:
+    branches: [ main, master ]
+    paths:
+      - 'packages/ui/src/i18n/locales/**'
+      - 'packages/extension/public/_locales/**'
+      - '**.md'
+      - 'docs/**'
+  pull_request:
+    branches: [ main, master ]
+    paths:
+      - 'packages/ui/src/i18n/locales/**'
+      - 'packages/extension/public/_locales/**'
+      - '**.md'
+      - 'docs/**'
+  workflow_dispatch: # Allow manual triggering
+
+jobs:
+  lingo-localization:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetch full history for better localization context
+          
+      - name: Lingo.Dev AI Localization
+        uses: lingodotdev/lingo.dev@0.99.4
+        with:
+          # Required: Lingo.dev API key (set in repository secrets)
+          api-key: ${{ secrets.LINGODOTDEV_API_KEY }}
+          
+          # Optional: Version of Lingo.dev CLI to use
+          version: "latest"
+          
+          # Optional: Create pull request for translation updates
+          pull-request: true
+          
+          # Optional: Custom commit message
+          commit-message: "🌐 Update translations via Lingo.Dev AI"
+          
+          # Optional: Custom pull request title
+          pull-request-title: "🌐 Automated AI Translation Updates"
+          
+          # Optional: Working directory (useful for monorepos)
+          working-directory: "."
+          
+          # Optional: Process own commits (avoid infinite loops)
+          process-own-commits: false
+          
+          # Optional: Enable parallel processing for faster execution
+          parallel: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

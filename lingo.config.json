@@ -1,0 +1,17 @@
+{
+  "source": "en-US",
+  "targets": ["zh-CN", "ja-JP", "ko-KR", "es-ES", "fr-FR", "de-DE"],
+  "include": [
+    "packages/ui/src/i18n/locales/**/*.ts",
+    "packages/extension/public/_locales/**/*.json",
+    "README*.md",
+    "docs/**/*.md"
+  ],
+  "exclude": [
+    "node_modules/**",
+    "dist/**",
+    "build/**",
+    "*.test.ts",
+    "*.spec.ts"
+  ]
+}
