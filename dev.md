@@ -1,66 +1,66 @@
-# 开发指南 (Development Guide)
+# Development Guide
 
-## 目录
+## Table of Contents
 
-- [本地开发环境配置](#本地开发环境配置)
-- [Docker开发和部署](#docker开发和部署)
-- [环境变量配置](#环境变量配置)
-- [开发工作流程](#开发工作流程)
-- [项目构建和部署](#项目构建和部署)
-- [常见问题解决](#常见问题解决)
+- [Local Development Environment Setup](#local-development-environment-setup)
+- [Docker Development and Deployment](#docker-development-and-deployment)
+- [Environment Variable Configuration](#environment-variable-configuration)
+- [Development Workflow](#development-workflow)
+- [Project Build and Deployment](#project-build-and-deployment)
+- [Troubleshooting Common Issues](#troubleshooting-common-issues)
 
-## 本地开发环境配置
+## Local Development Environment Setup
 
-### 基础环境要求
+### Basic Environment Requirements
 - Node.js >= 18
 - pnpm >= 8
 - Git >= 2.0
-- VSCode (推荐)
+- VSCode (Recommended)
 
-### 开发环境设置
+### Development Environment Setup
 ```bash
-# 1. 克隆项目
+# 1. Clone the project
 git clone https://github.com/linshenkx/prompt-optimizer.git
 cd prompt-optimizer
 
-# 2. 安装依赖
+# 2. Install dependencies
 pnpm install
 
-# 3. 启动开发服务
-pnpm dev               # 主开发命令：构建core/ui并运行web应用
-pnpm dev:web          # 仅运行web应用
-pnpm dev:fresh        # 完整重置并重新启动开发环境
+# 3. Start development server
+pnpm dev               # Main development command: build core/ui and run web app
+pnpm dev:web          # Run web app only
+pnpm dev:fresh        # Complete reset and restart development environment
 ```
 
-## Docker开发和部署
+## Docker Development and Deployment
 
-### 环境要求
+### Environment Requirements
 - Docker >= 20.10.0
 
-### Docker构建和运行
+### Docker Build and Run
 
-#### 基础构建
+#### Basic Build
 ```bash
-# 获取package.json中的版本号
-$VERSION=$(node -p "require('./package.json').version")
+# Get version number from package.json
+VERSION=$(node -p "require('./package.json').version")
 
-# 构建镜像（使用动态版本号）
+# Build image (using dynamic version number)
 docker build -t linshen/prompt-optimizer:$VERSION .
 
-# 添加latest标签
+# Add latest tag
 docker tag linshen/prompt-optimizer:$VERSION linshen/prompt-optimizer:latest
 
-# 运行容器
+# Run container
 docker run -d -p 80:80 --restart unless-stopped --name prompt-optimizer -e ACCESS_PASSWORD=1234!@#$  linshen/prompt-optimizer:$VERSION
 
 
-# 推送
+# Push
 docker push linshen/prompt-optimizer:$VERSION
 docker push linshen/prompt-optimizer:latest
 
 ```
 
-docker本地构建测试
+Docker local build test
 ```shell
 docker build -t linshen/prompt-optimizer:test .
 docker rm -f prompt-optimizer
@@ -69,37 +69,37 @@ docker run -d -p 80:80 --restart unless-stopped --name prompt-optimizer -e VITE_
 ```
 
 
-### 多阶段构建说明
+### Multi-stage Build Explanation
 
-Dockerfile使用了多阶段构建优化镜像大小：
+The Dockerfile uses multi-stage builds to optimize image size:
 
-1. `base`: 基础Node.js环境，安装pnpm
-2. `builder`: 构建阶段，安装依赖并构建项目
-3. `production`: 最终镜像，只包含构建产物和nginx
+1. `base`: Basic Node.js environment, installs pnpm
+2. `builder`: Build stage, installs dependencies and builds the project
+3. `production`: Final image, contains only build artifacts and nginx
 
-## 环境变量配置
+## Environment Variable Configuration
 
-### 本地开发环境变量
-在项目根目录创建 `.env.local` 文件：
+### Local Development Environment Variables
+Create a `.env.local` file in the project root directory:
 
 ```env
-# OpenAI API配置
+# OpenAI API Configuration
 VITE_OPENAI_API_KEY=your_openai_api_key
 
-# Gemini API配置
+# Gemini API Configuration
 VITE_GEMINI_API_KEY=your_gemini_api_key
 
-# DeepSeek API配置
+# DeepSeek API Configuration
 VITE_DEEPSEEK_API_KEY=your_deepseek_api_key
 
-# 自定义API配置
+# Custom API Configuration
 VITE_CUSTOM_API_KEY=your_custom_api_key
 VITE_CUSTOM_API_BASE_URL=your_custom_api_base_url
 VITE_CUSTOM_API_MODEL=your_custom_model_name
 ```
 
-### Docker环境变量
-通过 `-e` 参数设置容器环境变量：
+### Docker Environment Variables
+Set container environment variables using the `-e` parameter:
 
 ```bash
 docker run -d -p 80:80 \
@@ -108,91 +108,91 @@ docker run -d -p 80:80 \
   prompt-optimizer
 ```
 
-## 开发工作流程
+## Development Workflow
 
-### 代码提交规范
+### Code Commit Guidelines
 ```bash
-# 提交格式
+# Commit format
 <type>(<scope>): <subject>
 
-# 示例
-feat(ui): 添加新的提示词编辑器组件
-fix(core): 修复API调用超时问题
+# Example
+feat(ui): Add new prompt editor component
+fix(core): Fix API call timeout issue
 ```
 
-### 测试流程
+### Testing Process
 ```bash
-# 运行所有测试
+# Run all tests
 pnpm test
 
-# 运行特定包的测试
+# Run tests for a specific package
 pnpm test:core
 pnpm test:ui
 pnpm test:web
 ```
 
-## 项目构建和部署
+## Project Build and Deployment
 
-### 本地构建
+### Local Build
 ```bash
-# 构建所有包
+# Build all packages
 pnpm build
 
-# 构建特定包
+# Build a specific package
 pnpm build:core
 pnpm build:ui
 pnpm build:web
 pnpm build:ext
 ```
 
-### 常用Docker命令
+### Common Docker Commands
 
 ```bash
-# 查看容器日志
+# View container logs
 docker logs -f prompt-optimizer
 
-# 进入容器
+# Enter container
 docker exec -it prompt-optimizer sh
 
-# 容器管理
+# Container management
 docker stop prompt-optimizer
 docker start prompt-optimizer
 docker restart prompt-optimizer
 
-# 清理资源
+# Clean up resources
 docker rm prompt-optimizer
 docker rmi prompt-optimizer
 ```
 
-## 常见问题解决
+## Troubleshooting Common Issues
 
-### 依赖安装问题
+### Dependency Installation Issues
 ```bash
-# 清理依赖缓存
+# Clear dependency cache
 pnpm clean
 
-# 重新安装依赖
+# Reinstall dependencies
 pnpm install --force
 ```
 
-### 开发环境问题
+### Development Environment Issues
 ```bash
-# 完全重置开发环境
+# Completely reset development environment
 pnpm dev:fresh
 
-# 清理构建缓存
+# Clear build cache
 pnpm clean
 rm -rf node_modules
 pnpm install
 ```
 
-### 构建失败处理
-1. 检查Node.js版本是否符合要求
-2. 清理构建缓存：`pnpm clean`
-3. 重新安装依赖：`pnpm install`
-4. 查看详细构建日志：`pnpm build --debug`
+### Build Failure Handling
+1. Check if Node.js version meets requirements
+2. Clear build cache: `pnpm clean`
+3. Reinstall dependencies: `pnpm install`
+4. View detailed build logs: `pnpm build --debug`
 
-### 容器运行问题
-1. 检查端口占用：`netstat -ano | findstr :80`
-2. 检查容器日志：`docker logs prompt-optimizer`
-3. 检查容器状态：`docker ps -a`
+### Container Runtime Issues
+1. Check for port conflicts: `netstat -ano | findstr :80` (Windows) or `sudo netstat -tulnp | grep :80` (Linux/macOS)
+2. Check container logs: `docker logs prompt-optimizer`
+3. Check container status: `docker ps -a`
